@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require_relative '../lib/table_parser'
+
+ARGV << '-h' if ARGV.empty?
+
+options = {}
+
+OptionParser.new do |opts|
+  opts.banner = "Usage: table_parser [options]"
+
+  opts.on('-i', '--input FILENAME', 'File name') { |v| options[:file_name] = v }
+  opts.on('-adapter', '--adapter ADAPTER', 'Adapter style') { |v| options[:adapter_style] = v }
+  opts.on_tail("-h", "--help", "Show this message") do
+    puts opts
+    exit
+  end
+end.parse!
+
+input_file = File.read(options.fetch(:file_name))
+
+parser = TableParser.new
+parsed_output = parser.parse(input_file)
+
+puts parsed_output
+
+# require 'byebug'
+# byebug
+# puts 'debugging'
